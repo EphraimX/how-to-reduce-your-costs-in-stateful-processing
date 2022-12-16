@@ -1,43 +1,9 @@
-from kafka import KafkaProducer
-import json
-
-# Create a KafkaProducer instance
-producer = KafkaProducer(bootstrap_servers=["localhost:9092"])
-
-# Define the topic to which the data will be published
-topic = "vehicle_real_time_monitoring"
-
-# check if topic is in bytes and decode to string
-if type(topic) == bytes:
-    topic = topic.decode('utf-8')
-
-# Publish data to the topic using the producer.send() method
-for i in range(1, 100):
-    data = {"vehicle_id": i, "speed": i * 10, "fuel_level": i * 5, "engine_temp": i * 20}
-    data = json.dumps(data).encode('utf-8')
-    producer.send(topic, data)
-
-# Flush the producer to ensure all data is sent to Kafka
-producer.flush()
+from threat_data_generator import threat_data
+from threat_assessment import assess_threat
 
 
-from kafka import KafkaConsumer
-
-# Create a KafkaConsumer instance
-consumer = KafkaConsumer(bootstrap_servers=["localhost:9092"], group_id="real-time-monitoring")
-
-# Subscribe to the topic
-consumer.subscribe([topic])
-
-# Set the consumer to poll for data every 10 or 20 seconds
-consumer.poll(10)
-
-# Process the data from the topic
-for message in consumer:
-    print(f"Received message: {message.value}")
-
-# Tell Kafka that the message has been processed
-consumer.commit()
+threat_data_response = threat_data()
+threat_assessor = assess_threat()
 
 
 # Initialize an empty list to store the states
@@ -46,7 +12,7 @@ states = []
 
 try:
     # Poll for data and process it
-    for message in consumer:
+    for message in threat_assessor:
         # Add the state data to the list
         states.append(message.value)
 
