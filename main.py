@@ -11,6 +11,7 @@ states = []
 
 
 try:
+    print("Try")
     # Poll for data and process it
     for message in threat_assessor:
         # Add the state data to the list

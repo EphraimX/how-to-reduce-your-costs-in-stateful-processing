@@ -1,5 +1,8 @@
 from kafka import KafkaProducer
+from json import dumps
+from time import sleep
 import random
+
 
 
 # Create a KafkaProducer instance
@@ -13,10 +16,10 @@ producer = KafkaProducer(
 def threat_data():
 
     # Define the topic to which the data will be published
-    topic = "vehicle_threat_assessment_level"
+    topic = "topic_test"
 
     # Publish data to the topic using the producer.send() method
-    for i in range(1, 200):
+    for i in range(1, 20000000):
 
         data = {
             "vehicle_id" : i,
@@ -24,11 +27,16 @@ def threat_data():
         }
 
         if data["threat_level"] > 0.75:
-            data["is_threat"] = 1
-
+            data["is_threat"] = True
+        else:
+            data["is_threat"] = False
+    
+        
         producer.send(topic, data)
-
+        print(data)
 
     producer.flush()
 
     return "Data Successfully Sent"
+
+threat_data()

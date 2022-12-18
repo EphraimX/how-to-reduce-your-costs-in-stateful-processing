@@ -1,16 +1,27 @@
 from kafka import KafkaConsumer
+from time import time
+
+
+def count_threats(messages):
+    threat_count = 0
+    for message in messages:
+        if message["is_threat"]:
+            threat_count += 1
+    return threat_count
 
 
 def assess_threat():
 
     # Create a KafkaConsumer instance
-    consumer = KafkaConsumer(bootstrap_servers=["localhost:9092"], group_id="real-time-monitoring")
+    consumer = KafkaConsumer(
+        "topic_test", 
+        group_id='esq-threat-assessment', 
+        bootstrap_servers=['localhost:9092'],
+        api_version=(0, 9)
+    )
 
-    # Subscribe to the topic
-    consumer.subscribe([topic])
-
-    # Set the consumer to poll for data every 20 seconds
-    consumer.poll(20)
+    # Set the consumer to poll for data every 10 or 20 seconds
+    consumer.poll(10)
 
     # Process the data from the topic
     for message in consumer:
@@ -18,6 +29,6 @@ def assess_threat():
 
     # Tell Kafka that the message has been processed
     consumer.commit()
+        
 
-
-    return consumer
+assess_threat()
