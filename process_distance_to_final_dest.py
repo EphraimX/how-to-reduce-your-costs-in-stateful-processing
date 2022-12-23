@@ -40,17 +40,17 @@ for message in consumer:
 
     current_time = time.time()
 
-    # Accumulating Data
+    # Accumulate data
     states.append(message)
     
     print(message.value)
 
-    # Process Data Every 20 Seconds
+    # Process data every 20 seconds
     if current_time - previous_time >= 20:
-        # Persisting/Saving the data to disk
+        # Persist/save the data to disk
         print("Writing to Disk")
         write_to_disk(states, current_time)
-        # update the previous time to current time for the next iteration
+        # Update the previous time to current time for the next iteration
         previous_time = current_time
         # Empty the states list for accumulation of new data
         states = []
