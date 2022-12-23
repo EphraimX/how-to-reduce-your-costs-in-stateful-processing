@@ -3,7 +3,7 @@ from json import dumps
 import random
 
 
-# initializing the producer
+# Initialize the producer
 producer = KafkaProducer(
     bootstrap_servers=["localhost:9092"],
     value_serializer=lambda x:dumps(x).encode('utf-8'),
@@ -11,7 +11,7 @@ producer = KafkaProducer(
 )
 
 
-# random values as products distance from final destination
+# Random values as products' distance from final destination
 for product_id in range(2000):
 
     distance_from_destination = random.randint(100, 1000)
@@ -19,8 +19,8 @@ for product_id in range(2000):
         'Distance From Destination in KM'  : distance_from_destination
     }
     
-    # send data to kafka topic
+    # Send data to Kafka topic
     producer.send("rudders_technology", data)
     
-# Ensure that all messages in the producer's buffer are sent to the Kafka cluster.
+# Ensure that all messages in the producer's buffer are sent to the Kafka cluster
 producer.flush()
